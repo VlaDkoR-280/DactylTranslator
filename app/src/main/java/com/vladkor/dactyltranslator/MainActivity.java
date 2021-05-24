@@ -3,6 +3,7 @@ package com.vladkor.dactyltranslator;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -10,7 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -27,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnDetectObject;
 
     private CameraKitView cameraKitView;
-
-
 
     private LinearLayout bottomLinearLayout;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
         );
-
     }
 
     @Override
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cameraKitView.captureImage(new CameraKitView.ImageCallback() {
                 @Override
                 public void onImage(CameraKitView cameraKitView, byte[] bytes) {
-
+                    Toast.makeText(getApplicationContext(), "Capture", Toast.LENGTH_SHORT).show();
                 }
             });
         }else if(v.getId() == btnToggleCamera.getId()){
