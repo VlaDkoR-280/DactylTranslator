@@ -11,12 +11,16 @@
         android:orientation="vertical"
         android:background="#00000000">
 
-        <FrameLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#EFEDED"
+        <include
+            android:id="@+id/CameraLayout"
+            layout="@layout/camera_layout"
             />
+<!--        <FrameLayout-->
+<!--            android:id="@+id/container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#EFEDED"-->
+<!--            />-->
 
     </RelativeLayout>
 
