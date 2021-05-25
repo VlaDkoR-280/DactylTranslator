@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".LessonsActivity">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/fragment"
-        android:name="com.vladkor.dactyltranslator.BaseFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
