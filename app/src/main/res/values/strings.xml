@@ -17,6 +17,8 @@
     <string name="start_guide_text">Start Guide</string>
     <string name="score_of_game">Score</string>
     <string name="hint_score_of_game">Your Score</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
