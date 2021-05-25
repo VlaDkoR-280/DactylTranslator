@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnToggleCamera;
     private Button btnDetectObject;
 
-    private LinearLayout btnGraphicsEditor;
-    private LinearLayout btnLessons;
-    private LinearLayout btnSettings;
+    private Button btnGraphicsEditor;
+    private Button btnLessons;
+    private Button btnSettings;
 
     private ImageView btnClearTranslate;
 
