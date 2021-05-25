@@ -99,15 +99,17 @@
         android:background="@drawable/round_bg"
         android:backgroundTint="@color/yellow_500"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:paddingBottom="25dp">
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/graphicsEditorBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="25dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/white"
             android:drawableStart="@drawable/ic_graphics_editor_black_24"
@@ -123,7 +125,10 @@
             android:id="@+id/lessonsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/white"
             android:drawableStart="@drawable/ic_book_black_24"
@@ -138,8 +143,10 @@
             android:id="@+id/settingsBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/white"
             android:drawableStart="@drawable/ic_settings_black_24"

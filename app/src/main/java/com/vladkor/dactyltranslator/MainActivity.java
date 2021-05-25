@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -19,6 +20,8 @@ import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.zip.Inflater;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String MODEL_PATH = "";
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Classifier classifier;
 
+    private LessonsActivity lessonsActivity;
     private Button btnToggleCamera;
     private Button btnDetectObject;
 
@@ -167,7 +171,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(v.getId() == btnGraphicsEditor.getId()){
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.graphics_editor_name), Toast.LENGTH_SHORT).show();
         }else if (v.getId() == btnLessons.getId()){
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.lessons_name), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), getResources().getString(R.string.lessons_name), Toast.LENGTH_SHORT).show();
+            lessonsActivity = new LessonsActivity();
+            Intent i = new Intent(getApplicationContext(), lessonsActivity.getClass());
+            startActivity(i);
         }else if (v.getId() == btnSettings.getId()){
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.settings_name), Toast.LENGTH_SHORT).show();
         }

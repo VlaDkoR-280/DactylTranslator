@@ -25,27 +25,33 @@
 
     </com.camerakit.CameraKitView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ToggleBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_bg"
-        android:backgroundTint="@color/yellow_500"
+        android:backgroundTint="@color/blue"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
         android:text="@string/button_toggle"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/CaptureBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camera" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/CaptureBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_bg"
-        android:backgroundTint="@color/yellow_500"
+        android:backgroundTint="@color/blue"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
         android:text="@string/button_capture"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ToggleBtn"

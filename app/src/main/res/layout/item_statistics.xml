@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_bg"
+    android:backgroundTint="@color/white">
+
+    <TextView
+        android:id="@+id/textScoreGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score_of_game"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/scoreGame"
+        app:layout_constraintEnd_toEndOf="@+id/scoreGame"
+        app:layout_constraintStart_toStartOf="@+id/scoreGame" />
+
+    <TextView
+        android:id="@+id/scoreGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_score_of_game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="155dp"
+        android:layout_height="155dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="80"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
