@@ -2,4 +2,10 @@
     <string name="app_name">DactylTranslator</string>
     <string name="button_capture">capture</string>
     <string name="button_toggle">toggle</string>
+    <string name="start_translate_text">This will be the text.</string>
+    <string name="settings_name">Settings</string>
+    <string name="lessons_name">To study</string>
+    <string name="graphics_editor_name">Graphics editor</string>
+    <string name="clear_toast_text">Cleared</string>
+
 </resources>

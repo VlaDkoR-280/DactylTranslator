@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnToggleCamera;
     private Button btnDetectObject;
 
+    private ImageView btnClearTranslate;
+
     private CameraKitView cameraKitView;
 
     private LinearLayout bottomLinearLayout;
@@ -57,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cameraKitView = findViewById(R.id.camera);
 
+        btnClearTranslate = findViewById(R.id.clearButton);
+
+        btnClearTranslate.setOnClickListener(this);
         bottomLinearLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomLinearLayout);
         transtaleTextLayout = findViewById(R.id.translate_text);
@@ -143,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
         }else if(v.getId() == btnToggleCamera.getId()){
             cameraKitView.toggleFacing();
+        }else if (v.getId() == btnClearTranslate.getId()){
+            resultTextView.setText("");
+            forceTextView.setText("");
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.clear_toast_text), Toast.LENGTH_SHORT).show();
         }
     }
 }
