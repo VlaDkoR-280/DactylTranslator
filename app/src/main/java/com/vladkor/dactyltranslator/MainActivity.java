@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnToggleCamera;
     private Button btnDetectObject;
 
+    private LinearLayout btnGraphicsEditor;
+    private LinearLayout btnLessons;
+    private LinearLayout btnSettings;
+
     private ImageView btnClearTranslate;
 
     private CameraKitView cameraKitView;
@@ -56,6 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnDetectObject.setOnClickListener(this);
         btnToggleCamera.setOnClickListener(this);
+
+        btnGraphicsEditor = findViewById(R.id.graphicsEditorBtn);
+        btnLessons = findViewById(R.id.lessonsBtn);
+        btnSettings = findViewById(R.id.settingsBtn);
+
+        btnGraphicsEditor.setOnClickListener(this);
+        btnLessons.setOnClickListener(this);
+        btnSettings.setOnClickListener(this);
 
         cameraKitView = findViewById(R.id.camera);
 
@@ -152,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             resultTextView.setText("");
             forceTextView.setText("");
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.clear_toast_text), Toast.LENGTH_SHORT).show();
+        }else if(v.getId() == btnGraphicsEditor.getId()){
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.graphics_editor_name), Toast.LENGTH_SHORT).show();
+        }else if (v.getId() == btnLessons.getId()){
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.lessons_name), Toast.LENGTH_SHORT).show();
+        }else if (v.getId() == btnSettings.getId()){
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.settings_name), Toast.LENGTH_SHORT).show();
         }
     }
 }

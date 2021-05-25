@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="fill_horizontal"
     android:background="@drawable/bottom_sheet_bg"
+    android:backgroundTint="#FFFFFF"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="8dp"
@@ -79,16 +81,13 @@
             app:autoSizeStepGranularity="2sp"
             app:autoSizeTextType="uniform" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/clearButton"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:adjustViewBounds="true"
             android:background="@drawable/round_bg"
             android:backgroundTint="#DD0000"
-            android:cropToPadding="true"
-            android:scaleType="center"
             app:srcCompat="@drawable/ic_clear_white_24" />
 
     </LinearLayout>
@@ -101,26 +100,98 @@
         android:backgroundTint="@color/yellow_500"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingTop="50dp"
+        android:paddingTop="35dp"
         android:paddingRight="5dp"
-        android:paddingBottom="50dp">
+        android:paddingBottom="35dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/graphics_editor_name" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/graphicsEditorBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="@string/lessons_name" />
+            android:layout_height="match_parent"
+            android:background="@drawable/round_bg"
+            android:orientation="horizontal">
 
-        <TextView
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                app:srcCompat="@drawable/ic_graphics_editor_black_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:text="@string/graphics_editor_name"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lessonsBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="@string/settings_name" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                app:srcCompat="@drawable/ic_book_black_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:text="@string/lessons_name"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settingsBtn"
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                app:srcCompat="@drawable/ic_settings_black_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:text="@string/settings_name"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
