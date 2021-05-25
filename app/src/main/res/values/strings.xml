@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DactylTranslator</string>
+    <string name="button_capture">capture</string>
+    <string name="button_toggle">toggle</string>
 </resources>

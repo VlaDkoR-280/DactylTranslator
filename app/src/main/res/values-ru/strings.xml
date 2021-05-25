@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Переводчик Дактиля</string>
+    <string name="button_capture">снимок</string>
+    <string name="button_toggle">перевенуть</string>
+</resources>
