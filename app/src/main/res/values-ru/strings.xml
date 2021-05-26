@@ -17,4 +17,6 @@
     <string name="start_guide_text">Открыть</string>
     <string name="score_of_game">Счёт</string>
     <string name="hint_score_of_game">Твой счёт</string>
+    <string name="level_of_game">Уровень</string>
+    <string name="hint_level_of_game">Твой уровень</string>
 </resources>
