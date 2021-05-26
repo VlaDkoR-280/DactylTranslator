@@ -53,7 +53,7 @@ public class BaseFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-            nameS = getArguments().getString("NAME");
+            //nameS = getArguments().getString("NAME");
         }
     }
     private String nameS;

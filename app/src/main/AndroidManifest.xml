@@ -14,8 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DactylTranslator">
 
-        <activity android:name=".LessonsActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".LessonsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Classifier classifier;
 
     private LessonsActivity lessonsActivity;
-    private Button btnToggleCamera;
-    private Button btnDetectObject;
+    private CardView btnToggleCamera;
+    private CardView btnDetectObject;
 
     private CardView btnGraphicsEditor;
     private CardView btnLessons;
