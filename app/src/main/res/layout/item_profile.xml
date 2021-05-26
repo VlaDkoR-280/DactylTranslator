@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/round_bg"
     android:backgroundTint="@color/white"
     android:paddingBottom="25dp">
 
@@ -16,8 +15,7 @@
         android:layout_marginTop="25dp"
         android:scaleType="fitStart"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nameTextView"

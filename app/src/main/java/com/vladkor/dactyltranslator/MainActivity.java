@@ -2,6 +2,7 @@ package com.vladkor.dactyltranslator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,15 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnToggleCamera;
     private Button btnDetectObject;
 
-    private Button btnGraphicsEditor;
-    private Button btnLessons;
-    private Button btnSettings;
+    private CardView btnGraphicsEditor;
+    private CardView btnLessons;
+    private CardView btnSettings;
 
-    private ImageView btnClearTranslate;
+    private CardView btnClearTranslate;
 
     private CameraKitView cameraKitView;
 
-    private LinearLayout bottomLinearLayout;
+    private CardView bottomLinearLayout;
     private BottomSheetBehavior bottomSheetBehavior;
     private LinearLayout transtaleTextLayout;
     private ImageView bottomSheetArrow;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         resultTextView = findViewById(R.id.t9_text_view);
         forceTextView = findViewById(R.id.force_text_view);
 

@@ -19,28 +19,8 @@ public class LessonsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-        Account[] list = manager.getAccounts();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-        }
-
-        setContentView(R.layout.activity_lessons);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("NAME", list[0].name);
         f1 = new BaseFragment();
-        f1.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragment, f1);
         fragmentTransaction.commit();
