@@ -2,6 +2,7 @@ package com.vladkor.dactyltranslator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
-public class LessonsActivity extends AppCompatActivity {
+public class LessonsActivity extends AppCompatActivity implements Movable {
     private static final int RC_SIGN_IN = 123;
     private ProfilePersonFragment f1;
     private GoogleSignInClient mGoogleSignInClient;
@@ -32,9 +33,17 @@ public class LessonsActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
+        mAuth = FirebaseAuth.getInstance();
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null){
+        if(currentUser==null){
+            signIn();
+        }else{
             loadPersonFragment();
         }
 
@@ -44,22 +53,6 @@ public class LessonsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lessons);
-
-
-        mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        signIn();
-
-
-
-
-
     }
 
     private void signIn() {
@@ -71,16 +64,13 @@ public class LessonsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
 
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
                 signIn();
 
             }
@@ -94,15 +84,12 @@ public class LessonsActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null){
                                 loadPersonFragment();
                             }
 
                         } else {
-                            // If sign in fails, display a message to the user.
                             signIn();
                         }
                     }
@@ -112,9 +99,18 @@ public class LessonsActivity extends AppCompatActivity {
     private void loadPersonFragment(){
 
         f1 = new ProfilePersonFragment();
+        f1.setMovable(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragment, f1);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void MoveTo(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, fragment);
         fragmentTransaction.commit();
     }
 }

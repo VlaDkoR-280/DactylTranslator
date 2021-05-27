@@ -1,9 +1,11 @@
 package com.vladkor.dactyltranslator;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +38,7 @@ import java.util.ArrayList;
  * Use the {@link ProfilePersonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfilePersonFragment extends Fragment {
+public class ProfilePersonFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,6 +51,8 @@ public class ProfilePersonFragment extends Fragment {
 
     public static final String KEY = "Persons";
 
+    private Movable controller;
+
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private GoogleSignInAccount account;
@@ -53,7 +60,12 @@ public class ProfilePersonFragment extends Fragment {
     private Person myPerson;
 
     private TextView nameTextView;
+    private TextView scoreTextView;
+    private TextView levelTextView;
     private ImageView avatarImageView;
+    private Button logOutButton;
+    private ProgressBar progressBar;
+    private CardView gameButton;
 
     private ArrayList<Person> topPlaces = new ArrayList<>();
     private ArrayList<Person> persons = new ArrayList<>();
@@ -90,9 +102,14 @@ public class ProfilePersonFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_base, container, false);
-        nameTextView = v.findViewById(R.id.namePerson);
-        avatarImageView = v.findViewById(R.id.imagePerson);
-        recyclerView = v.findViewById(R.id.topPlaces);
+        gameButton = v.findViewById(R.id.game_button);
+        scoreTextView = v.findViewById(R.id.score_text_view);
+        progressBar = v.findViewById(R.id.score_progress_bar);
+        logOutButton = v.findViewById(R.id.log_out_button);
+        levelTextView = v.findViewById(R.id.level_person);
+        nameTextView = v.findViewById(R.id.name_person);
+        avatarImageView = v.findViewById(R.id.image_person);
+        recyclerView = v.findViewById(R.id.top_places);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         account = GoogleSignIn.getLastSignedInAccount(getActivity());
@@ -129,9 +146,13 @@ public class ProfilePersonFragment extends Fragment {
                     }
                     //TODO Сортировка по количеству очков
                     //...
-                    Toast.makeText(getContext(), Integer.toString(persons.size()), Toast.LENGTH_LONG).show();
+                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
+                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
+                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
+                    MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), topPlaces);
+                    recyclerView.setAdapter(adapter);
                 }catch (Exception e){
-                    Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(),e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -141,15 +162,13 @@ public class ProfilePersonFragment extends Fragment {
             }
         });
 
+        logOutButton.setOnClickListener(this);
 
-
-
-        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), topPlaces);
-        recyclerView.setAdapter(adapter);
         return v;
+    }
+
+    public void setMovable(Movable movable){
+        this.controller = movable;
     }
 
     private void addMeToDB(){
@@ -159,6 +178,24 @@ public class ProfilePersonFragment extends Fragment {
 
     private void getMeFromDB(Person item){
         myPerson = item;
+        int score = myPerson.getScore() % 100;
+        scoreTextView.setText(String.format("%d/100", score));
+        try{
+            levelTextView.setText(Integer.toString(myPerson.getLevel()));
+        }catch (Exception e){}
+        progressBar.setProgress(score);
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == logOutButton.getId()){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getActivity(), LessonsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else if(v.getId() == gameButton.getId()){
+            GameFragment gameFragment = new GameFragment();
+            controller.MoveTo(gameFragment);
+        }
+    }
 }

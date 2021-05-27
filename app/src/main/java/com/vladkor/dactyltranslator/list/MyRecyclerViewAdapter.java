@@ -37,7 +37,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             levelTop = itemView.findViewById(R.id.levelTop);
             avatarTop = itemView.findViewById(R.id.imageTop);
             imagePlaceTop = itemView.findViewById(R.id.placeTopImage);
-            progressBarTop = itemView.findViewById(R.id.progressBar);
+            progressBarTop = itemView.findViewById(R.id.progressBarTop);
             res = itemView.getResources();
         }
     }
