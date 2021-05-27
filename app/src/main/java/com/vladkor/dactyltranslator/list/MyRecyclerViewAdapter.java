@@ -2,7 +2,6 @@ package com.vladkor.dactyltranslator.list;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
-    ArrayList<ItemTopPlace> topPlaces;
+    ArrayList<Person> topPlaces;
     private Context context;
     Resources res;
 
@@ -42,7 +41,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             res = itemView.getResources();
         }
     }
-    public MyRecyclerViewAdapter(Context context, ArrayList<ItemTopPlace> array){
+    public MyRecyclerViewAdapter(Context context, ArrayList<Person> array){
         topPlaces = array;
         this.context = context;
     }
@@ -56,7 +55,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ItemTopPlace topPlace = topPlaces.get(position);
+        Person topPlace = topPlaces.get(position);
         holder.nameTop.setText(topPlace.getName());
         holder.levelTop.setText(Integer.toString(topPlace.getLevel()));
         Picasso.get().load(topPlace.getImageProfile()).into(holder.avatarTop);

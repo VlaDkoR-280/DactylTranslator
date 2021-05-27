@@ -3,6 +3,7 @@ package com.vladkor.dactyltranslator;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,15 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-import com.vladkor.dactyltranslator.list.ItemTopPlace;
+import com.vladkor.dactyltranslator.list.Person;
 import com.vladkor.dactyltranslator.list.MyRecyclerViewAdapter;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 
@@ -40,14 +44,19 @@ public class ProfilePersonFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String nameProfile;
-    private String idProfile;
-    private Uri imageProfile;
+    public static final String KEY = "Persons";
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private GoogleSignInAccount account;
+
+    private Person myPerson;
 
     private TextView nameTextView;
     private ImageView avatarImageView;
 
-    private ArrayList<ItemTopPlace> topPlaces = new ArrayList<>();
+    private ArrayList<Person> topPlaces = new ArrayList<>();
+    private ArrayList<Person> persons = new ArrayList<>();
     private RecyclerView recyclerView;
 
     public ProfilePersonFragment() {
@@ -71,6 +80,9 @@ public class ProfilePersonFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference(KEY);
     }
 
     @Override
@@ -83,18 +95,70 @@ public class ProfilePersonFragment extends Fragment {
         recyclerView = v.findViewById(R.id.topPlaces);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
+        account = GoogleSignIn.getLastSignedInAccount(getActivity());
         if(account!= null){
             nameTextView.setText(account.getDisplayName());
             Uri uriPhoto = account.getPhotoUrl();
             Picasso.get().load(uriPhoto).into(avatarImageView);
         }
 
-        topPlaces.add(new ItemTopPlace("Test", account.getPhotoUrl(), 10));
-        topPlaces.add(new ItemTopPlace("Test", account.getPhotoUrl(), 10));
-        topPlaces.add(new ItemTopPlace("Test", account.getPhotoUrl(), 10));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(topPlaces.size() > 0) topPlaces.clear();
+                if(persons.size() > 0) persons.clear();
+                try{
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        Person item = ds.getValue(Person.class);
+                        persons.add(item);
+                    }
+                    if (persons.size() == 0) {
+                        addMeToDB();
+                    }else{
+                        boolean iExist = false;
+                        for(Person item : persons){
+                            if(item.getID().equals(account.getId())){
+                                iExist = true;
+                                getMeFromDB(item);
+                                break;
+                            }
+                        }
+                        if(!iExist){
+                            addMeToDB();
+                        }
+                    }
+                    //TODO Сортировка по количеству очков
+                    //...
+                    Toast.makeText(getContext(), Integer.toString(persons.size()), Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    Toast.makeText(getContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
+        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
+        topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
         MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), topPlaces);
         recyclerView.setAdapter(adapter);
         return v;
     }
+
+    private void addMeToDB(){
+        Person myPerson = new Person(account.getDisplayName(),account.getPhotoUrl().toString(),0, account.getId());
+        myRef.push().setValue(myPerson);
+    }
+
+    private void getMeFromDB(Person item){
+        myPerson = item;
+    }
+
 }

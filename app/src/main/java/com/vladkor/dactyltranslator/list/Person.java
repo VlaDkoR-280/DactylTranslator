@@ -2,17 +2,41 @@ package com.vladkor.dactyltranslator.list;
 
 import android.net.Uri;
 
-public class ItemTopPlace {
+public class Person {
 
     private String name;
-    private Uri imageProfile;
+    private String imageProfile;
     private int score;
+    private String ID;
 
-    public ItemTopPlace(String name, Uri imageProfile, int score) {
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public Person(String name, String imageProfile, int score) {
         this.name = name;
         this.imageProfile = imageProfile;
         this.score = score;
         this.level = score / 100;
+    }
+
+    public Person(String name, String imageProfile, int score, String id) {
+        this.name = name;
+        this.imageProfile = imageProfile;
+        this.score = score;
+        this.level = score / 100;
+        this.ID = id;
+    }
+    public Person() {
+        this.name = "";
+        this.imageProfile = "";
+        this.score = 0;
+        this.level = 0;
+        this.ID = "";
     }
 
     public int getScore() {
@@ -33,11 +57,11 @@ public class ItemTopPlace {
         this.name = name;
     }
 
-    public Uri getImageProfile() {
+    public String getImageProfile() {
         return imageProfile;
     }
 
-    public void setImageProfile(Uri imageProfile) {
+    public void setImageProfile(String imageProfile) {
         this.imageProfile = imageProfile;
     }
 
