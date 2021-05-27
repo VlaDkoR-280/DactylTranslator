@@ -1,5 +1,6 @@
 package com.vladkor.dactyltranslator;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +28,12 @@ public class ProfilePersonFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String nameProfile;
+    private String idProfile;
+    private Uri imageProfile;
+
+    private TextView nameTextView;
 
     public ProfilePersonFragment() {
         // Required empty public constructor
@@ -59,6 +70,12 @@ public class ProfilePersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_base, container, false);
+        View v = inflater.inflate(R.layout.fragment_base, container, false);
+        nameTextView = v.findViewById(R.id.namePerson);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if(account!= null){
+            nameTextView.setText(account.getDisplayName());
+        }
+        return v;
     }
 }
