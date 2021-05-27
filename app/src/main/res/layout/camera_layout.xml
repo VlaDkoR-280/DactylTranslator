@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/CameraLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="620dp">
 
     <androidx.cardview.widget.CardView
         app:cardElevation="30dp"
@@ -19,7 +19,7 @@
         app:camera_flash="auto"
         app:camera_focus="continuous"
         app:camera_permissions="camera"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        android:layout_marginTop="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +45,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/CaptureBtn"
         app:layout_constraintEnd_toStartOf="@+id/CaptureBtn"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
         <ImageView
             android:layout_width="match_parent"
@@ -56,16 +57,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/CaptureBtn"
-        app:cardElevation="20dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?android:attr/selectableItemBackground"
         android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginTop="20dp"
         app:cardBackgroundColor="@color/blue"
         app:cardCornerRadius="50dp"
+        app:cardElevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ToggleBtn"
@@ -77,12 +78,5 @@
             android:scaleType="center"
             android:src="@drawable/ic_camera_24" />
     </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="172dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

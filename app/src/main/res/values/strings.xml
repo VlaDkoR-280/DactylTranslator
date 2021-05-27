@@ -20,6 +20,10 @@
     <string name="hint_level_of_game">Your level</string>
     <string name="hint_score_of_game">Your Score</string>
     <string name="log_out">Log Out (Account)</string>
+    <string name="answer">Show the letter</string>
+    <string name="next_level">Next Level</string>
+    <string name="attempts">Attempts</string>
+    <string name="hint_score_of_level">Your score of Level</string>
 
 
 </resources>

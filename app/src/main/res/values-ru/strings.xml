@@ -20,4 +20,8 @@
     <string name="level_of_game">Уровень</string>
     <string name="hint_level_of_game">Твой уровень</string>
     <string name="log_out">Выйти (Аккаунт)</string>
+    <string name="answer">Покажите букву</string>
+    <string name="next_level">Следующий уровень</string>
+    <string name="attempts">Попытки</string>
+    <string name="hint_score_of_level">Твой счёт за уровень</string>
 </resources>

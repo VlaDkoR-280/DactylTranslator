@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.vladkor.dactyltranslator.Game.GameFragment;
 import com.vladkor.dactyltranslator.list.Person;
 import com.vladkor.dactyltranslator.list.MyRecyclerViewAdapter;
 
@@ -48,6 +48,8 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private DataSnapshot myDataSnapshot;
 
     public static final String KEY = "Persons";
 
@@ -184,15 +186,14 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
             levelTextView.setText(Integer.toString(myPerson.getLevel()));
         }catch (Exception e){}
         progressBar.setProgress(score);
+        controller.SetMyPerson(item);
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == logOutButton.getId()){
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getActivity(), LessonsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            controller.ReAuth();
         }else if(v.getId() == gameButton.getId()){
             GameFragment gameFragment = new GameFragment();
             controller.MoveTo(gameFragment);

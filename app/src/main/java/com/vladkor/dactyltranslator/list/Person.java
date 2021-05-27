@@ -45,6 +45,7 @@ public class Person {
 
     public void setScore(int score) {
         this.score = score;
+        this.level = score / 100;
     }
 
     private int level;
