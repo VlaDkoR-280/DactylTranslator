@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet_layout"
-    app:cardCornerRadius="50dp"
+    app:cardCornerRadius="40dp"
     app:cardElevation="50dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     app:behavior_hideable="true"
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:background="@drawable/bottom_bevel"
-                android:gravity="bottom|center"
+                android:gravity="center"
                 android:hint="@string/start_translate_text"
                 android:maxHeight="80dp"
                 android:maxLength="72"
@@ -92,11 +92,17 @@
                 app:cardCornerRadius="30dp"
                 android:backgroundTint="#DD0000"
                 app:cardElevation="8dp"
-                android:layout_margin="15dp">
+                android:layout_margin="15dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:foreground="?android:attr/selectableItemBackground"
+                >
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@android:drawable/ic_media_rew"
+                    android:src="@drawable/ic_clear_24"
+                    android:padding="3dp"
                     android:layout_gravity="center"/>
             </androidx.cardview.widget.CardView>
 
@@ -133,7 +139,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:src="@drawable/abc_vector_test"/>
+                    android:src="@drawable/ic_graphtext_24"
+                    android:padding="10dp"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -157,12 +164,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:src="@drawable/abc_vector_test"/>
+                    android:src="@drawable/ic_play_24"
+                    android:padding="6dp"/>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/settingsBtn"
+                android:id="@+id/aboutBtn"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:elevation="50dp"
@@ -180,7 +188,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:src="@drawable/abc_vector_test"/>
+                    android:src="@drawable/ic_info_24"
+                    android:padding="6dp"/>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </LinearLayout>

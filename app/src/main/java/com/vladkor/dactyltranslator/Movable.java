@@ -15,6 +15,6 @@ public interface Movable {
     public void ReAuth();
     public Person GetMyPerson();
     public void SetMyPerson(Person person);
-    public void SetMyPersonData(Person person);
+    public void SetMyPersonData();
     public void SetMyRefData(DatabaseReference ref);
 }

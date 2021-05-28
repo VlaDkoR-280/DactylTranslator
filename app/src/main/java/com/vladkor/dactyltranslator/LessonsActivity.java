@@ -148,13 +148,12 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
     @Override
     public void SetMyPerson(Person person) {
         myPerson = person;
-
     }
 
     @Override
-    public void SetMyPersonData(Person person) {
-        if(myRef!=null){
-            myRef.child(person.getID()).setValue(person);
+    public void SetMyPersonData() {
+        if(myRef!=null && myPerson != null){
+            myRef.child(myPerson.getID()).setValue(myPerson);
         }
     }
 

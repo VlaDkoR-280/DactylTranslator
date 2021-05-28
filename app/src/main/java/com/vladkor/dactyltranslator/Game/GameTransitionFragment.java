@@ -1,13 +1,17 @@
 package com.vladkor.dactyltranslator.Game;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.contentcapture.DataRemovalRequest;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,12 +22,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.vladkor.dactyltranslator.Movable;
 import com.vladkor.dactyltranslator.R;
 import com.vladkor.dactyltranslator.list.Person;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,10 +55,15 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
     private Person myPerson;
 
     private Button nextLevelButton;
+    private TextView scoreOfLevel;
     private TextView namePerson;
     private TextView scorePerson;
+    private TextView levelPerson;
     private ProgressBar progressBar;
     private ImageView imagePerson;
+
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     private int offsetScore;
 
@@ -83,30 +100,78 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
         View v = inflater.inflate(R.layout.fragment_game_transition, container, false);
 
         myPerson = controller.GetMyPerson();
-        if(myPerson == null){
-            controller.ReAuth();
-        }else{
-            myPerson.setScore(myPerson.getScore() + offsetScore);
-            if(myPerson.getScore() < 0){
-                myPerson.setScore(0);
-            }
-            controller.SetMyPerson(myPerson);
-            controller.SetMyPersonData(myPerson);
+
+        if (myPerson == null){
+            return v;
         }
-        myPerson = controller.GetMyPerson();
+        int score = myPerson.getScore() + offsetScore;
+        if (score<0){
+            myPerson.setScore(0);
+        }else{
+            myPerson.setScore(score);
+        }
+        levelPerson = v.findViewById(R.id.level_update);
+        scoreOfLevel = v.findViewById(R.id.score_of_level);
         nextLevelButton = v.findViewById(R.id.next_level_button);
         namePerson = v.findViewById(R.id.name_person);
         scorePerson = v.findViewById(R.id.score_text_view);
         progressBar = v.findViewById(R.id.score_progress_bar);
         imagePerson = v.findViewById(R.id.image_person);
-        int score = myPerson.getScore() % 100;
-        progressBar.setProgress(score);
-        scorePerson.setText(String.format("%d/100", score));
-        namePerson.setText(myPerson.getName());
+        UpdateViewPerson();
 
         nextLevelButton.setOnClickListener(this);
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("Users");
+        myRef.child(myPerson.getID()).setValue(myPerson);
+        myRef.addChildEventListener(new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Person item = snapshot.getValue(Person.class);
+                if(item.getID().equals(myPerson.getID())){
+                    myPerson = item;
+                    UpdateViewPerson();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         return v;
+    }
+
+    private void UpdateViewPerson(){
+        namePerson.setText(myPerson.getName());
+        int shortScore = myPerson.getScore() % 100;
+        scorePerson.setText(Integer.toString(shortScore));
+        Picasso.get().load(myPerson.getImageProfile()).into(imagePerson);
+        progressBar.setProgress(shortScore);
+        levelPerson.setText(Integer.toString(myPerson.getLevel()));
+        scorePerson.setText(String.format("%d/100", shortScore));
+        if(offsetScore < 0){
+            scoreOfLevel.setTextColor(Color.RED);
+        }else{
+            scoreOfLevel.setTextColor(Color.GREEN);
+        }
+        scoreOfLevel.setText(Integer.toString(offsetScore));
     }
 
     public void setController(Movable movable){

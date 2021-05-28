@@ -70,6 +70,15 @@
                     android:paddingRight="10dp"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/score_of_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="@string/hint_score_of_level"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
 
             </LinearLayout>
 
@@ -80,28 +89,23 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
-        android:layout_marginVertical="50dp">
-
+        android:layout_marginVertical="100dp">
         <TextView
+            android:id="@+id/level_update"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/hint_score_of_level"
-            android:textColor="@color/black"
-            android:textSize="32sp"
-            android:gravity="center"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="match_parent"
-            android:progress="60"
-            android:layout_height="match_parent"
-            android:progressTint="@color/blue"/>
+            android:gravity="center"
+            android:textSize="36sp"
+            android:background="@drawable/round_rectangle"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:text="@string/level_of_game"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

@@ -186,7 +186,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         levelTextView.setText(Integer.toString(myPerson.getLevel()));
         progressBar.setProgress(score);
         controller.SetMyRefData(myRef);
-//        controller.SetMyPerson(myPerson);
+        controller.SetMyPerson(myPerson);
     }
 
     private ArrayList<Person> SortTopPlaces(ArrayList<Person> users){

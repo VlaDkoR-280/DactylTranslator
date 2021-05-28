@@ -9,15 +9,17 @@ import java.util.Random;
 public class GameCreator {
     Random random;
     private int ID;
+    private int attemps;
     private String[] letters;
     private Uri[] imageLetters;
     private String answer;
     public GameCreator(){
         letters = new String[]{"а","б","в","г","д","е","ж","з","и","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","ъ","ы","э","ю","я"};
         imageLetters = new Uri[]{};
+        attemps = 3;
     }
 
-    public int GenerateId(){
+    private int GenerateId(){
         random = new Random();
         int id;
         do {
@@ -26,18 +28,18 @@ public class GameCreator {
         ID = id;
         return id;
     }
-    public int GenerateId(int startBounds, int endBounds){
+    private int GenerateId(int startBounds, int endBounds){
         random = new Random();
         int id;
         do {
             id = random.nextInt();
-        }while(id > startBounds && id < endBounds);
+        }while(id < startBounds && id > endBounds);
         return id;
     }
 
 
     public void CreateEasyGame() {
-        answer = letters[GenerateId()];
+        answer = letters[4];
     }
 
     public void CreateNormalGame() {
@@ -48,8 +50,13 @@ public class GameCreator {
 
     }
 
+    public int getAttemps(){
+        return attemps;
+    }
+
     public boolean checkAnswer(String answer) {
-        return this.answer == answer;
+        attemps--;
+        return this.answer == answer && attemps >= 0;
     }
 
     public String getAnswer(){

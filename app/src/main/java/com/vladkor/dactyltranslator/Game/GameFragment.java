@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
@@ -30,6 +31,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private GameCreator gameCreator;
     private Movable controller;
 
+
+
     private CameraKitView cameraKitView;
     private CardView toggleCamera;
     private CardView captureImage;
@@ -39,6 +42,8 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private String mParam1;
     private String mParam2;
+    private TextView answerText;
+    private TextView attemps;
 
     public GameFragment() {
         // Required empty public constructor
@@ -67,8 +72,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
+        attemps = v.findViewById(R.id.attemps);
         cameraKitView = v.findViewById(R.id.camera);
-
+        answerText = v.findViewById(R.id.answer_text);
         captureImage = v.findViewById(R.id.CaptureBtn);
         toggleCamera = v.findViewById(R.id.ToggleBtn);
         helpButton = v.findViewById(R.id.help_button);
@@ -79,6 +85,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         helpButton.setOnClickListener(this);
         captureImage.setOnClickListener(this);
         toggleCamera.setOnClickListener(this);
+        gameCreator.CreateEasyGame();
+        answerText.setText(String.format("%s", gameCreator.getAnswer()));
+        int a = gameCreator.getAttemps();
+        attemps.setText(Integer.toString(a));
         return v;
     }
 
@@ -122,6 +132,12 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         GameTransitionFragment gtf = new GameTransitionFragment();
 
                         toGameTransition(10);
+                    }
+                    int a = gameCreator.getAttemps();
+                    attemps.setText(Integer.toString(a));
+                    if (a <= 0){
+                        GameTransitionFragment gtf = new GameTransitionFragment();
+                        toGameTransition(-5);
                     }
                 }
             });

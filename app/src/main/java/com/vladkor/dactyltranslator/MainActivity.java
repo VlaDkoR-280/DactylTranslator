@@ -4,24 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CardView btnGraphicsEditor;
     private CardView btnLessons;
-    private CardView btnSettings;
+    private CardView btnAbout;
 
     private CardView btnClearTranslate;
 
@@ -67,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnGraphicsEditor = findViewById(R.id.graphicsEditorBtn);
         btnLessons = findViewById(R.id.lessonsBtn);
-        btnSettings = findViewById(R.id.settingsBtn);
+        btnAbout = findViewById(R.id.aboutBtn);
 
         btnGraphicsEditor.setOnClickListener(this);
         btnLessons.setOnClickListener(this);
-        btnSettings.setOnClickListener(this);
+        btnAbout.setOnClickListener(this);
 
         cameraKitView = findViewById(R.id.camera);
 
@@ -175,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lessonsActivity = new LessonsActivity();
             Intent i = new Intent(getApplicationContext(), lessonsActivity.getClass());
             startActivity(i);
-        }else if (v.getId() == btnSettings.getId()){
+        }else if (v.getId() == btnAbout.getId()){
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.settings_name), Toast.LENGTH_SHORT).show();
         }
     }
