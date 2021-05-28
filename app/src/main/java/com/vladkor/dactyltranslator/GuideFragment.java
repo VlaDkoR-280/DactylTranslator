@@ -23,7 +23,6 @@ public class GuideFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private Movable controller;
 
     private ArrayList<ItemWord> words = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -72,7 +71,4 @@ public class GuideFragment extends Fragment {
         return v;
     }
 
-    public void setController(Movable movable){
-        controller = movable;
-    }
 }

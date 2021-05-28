@@ -24,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
-import com.vladkor.dactyltranslator.Movable;
 import com.vladkor.dactyltranslator.R;
 import com.vladkor.dactyltranslator.TopPlacesList.Person;
 

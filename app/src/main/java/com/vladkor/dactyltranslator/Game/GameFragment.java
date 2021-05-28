@@ -15,21 +15,13 @@ import android.widget.TextView;
 
 import com.camerakit.CameraKitView;
 import com.squareup.picasso.Picasso;
-import com.vladkor.dactyltranslator.Movable;
 import com.vladkor.dactyltranslator.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class GameFragment extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private GameCreator gameCreator;
-    private Movable controller;
 
 
 
@@ -44,17 +36,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private TextView attemps;
 
     public GameFragment() {
-        // Required empty public constructor
+
     }
 
-    public static GameFragment newInstance(String param1, String param2) {
-        GameFragment fragment = new GameFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,9 +98,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         super.onStop();
     }
 
-    public void setController(Movable movable){
-        controller = movable;
-    }
 
     @Override
     public void onClick(View v) {

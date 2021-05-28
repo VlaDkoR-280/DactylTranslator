@@ -1,17 +1,35 @@
 package com.vladkor.dactyltranslator;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CaptureRequest;
+
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.webkit.HttpAuthHandler;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,10 +38,15 @@ import android.widget.Toast;
 import com.camerakit.CameraKitView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
+
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
-
+    //Queue<ByteBuffer> queue;
     private static final String MODEL_PATH = "";
     private static final boolean QUANT = false;
     private static final String LABEL_PATH = "";
@@ -40,7 +63,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private CardView btnClearTranslate;
 
-    private CameraKitView cameraKitView;
+    Handler handler = new Handler();
+
+    private TextureView mImageView;
 
     private CardView bottomLinearLayout;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -49,6 +74,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private TextView resultTextView;
     private TextView forceTextView;
+
+
+    CameraService[] myCameras = null;
+    private ImageView im;
+
+    private CameraManager mCameraManager    = null;
+    private final int CAMERA1   = 0;
+    private final int CAMERA2   = 1;
+    private boolean cameraFace = true;
 
 
     public MainFragment() {
@@ -75,6 +109,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         btnDetectObject.setOnClickListener(this);
         btnToggleCamera.setOnClickListener(this);
 
+        mImageView = v.findViewById(R.id.camera);
         btnGraphicsEditor = v.findViewById(R.id.graphicsEditorBtn);
         btnLessons = v.findViewById(R.id.lessonsBtn);
         btnAbout = v.findViewById(R.id.aboutBtn);
@@ -83,7 +118,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         btnLessons.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_signInFragment));
         btnAbout.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_aboutFragment));
 
-        cameraKitView = v.findViewById(R.id.camera);
+
+
 
         btnClearTranslate = v.findViewById(R.id.clearButton);
 
@@ -129,54 +165,190 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     }
                 }
         );
+
+        if (getContext().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                ||
+                (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        )
+        {
+            requestPermissions(new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        }
+
+        mCameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
+        try{
+            myCameras = new CameraService[mCameraManager.getCameraIdList().length];
+
+            for (String cameraID : mCameraManager.getCameraIdList()) {
+                int id = Integer.parseInt(cameraID);
+
+                myCameras[id] = new CameraService(mCameraManager,cameraID);
+
+            }
+        }
+        catch(CameraAccessException e){
+            e.printStackTrace();
+        }
+
         return v;
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
-        cameraKitView.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        cameraKitView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        cameraKitView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        cameraKitView.onStop();
-        super.onStop();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (myCameras[CAMERA2].isOpen()) {
+                    myCameras[CAMERA2].closeCamera();
+                }
+                if (myCameras[CAMERA1] != null) {
+                    if (!myCameras[CAMERA1].isOpen()) myCameras[CAMERA1].openCamera();
+                }
+            }
+        }, 500);
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == btnDetectObject.getId()){
-            cameraKitView.captureImage(new CameraKitView.ImageCallback() {
-                @Override
-                public void onImage(CameraKitView cameraKitView, byte[] bytes) {
-                    Toast.makeText(v.getContext(), getResources().getString(R.string.button_capture), Toast.LENGTH_SHORT).show();
-                }
-            });
+            mImageView.getBitmap();
         }else if(v.getId() == btnToggleCamera.getId()){
-            cameraKitView.toggleFacing();
+            if(cameraFace){
+                if (myCameras[CAMERA2].isOpen()) {myCameras[CAMERA2].closeCamera();}
+                if (myCameras[CAMERA1] != null) {
+                    if (!myCameras[CAMERA1].isOpen()) myCameras[CAMERA1].openCamera();
+                }
+                cameraFace = !cameraFace;
+            }else{
+                if (myCameras[CAMERA1].isOpen()) {myCameras[CAMERA1].closeCamera();}
+                if (myCameras[CAMERA2] != null) {
+                    if (!myCameras[CAMERA2].isOpen()) myCameras[CAMERA2].openCamera();
+                }
+                cameraFace = !cameraFace;
+            }
         }else if (v.getId() == btnClearTranslate.getId()){
             resultTextView.setText("");
             forceTextView.setText("");
             Toast.makeText(v.getContext(), getResources().getString(R.string.clear_toast_text), Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+
+    public class CameraService {
+
+
+        private String mCameraID;
+        private CameraDevice mCameraDevice = null;
+        private CameraCaptureSession mCaptureSession;
+
+        public CameraService(CameraManager cameraManager, String cameraID) {
+
+            mCameraManager = cameraManager;
+            mCameraID = cameraID;
+
+        }
+
+        private CameraDevice.StateCallback mCameraCallback = new CameraDevice.StateCallback() {
+
+            @Override
+            public void onOpened(CameraDevice camera) {
+                mCameraDevice = camera;
+                createCameraPreviewSession();
+            }
+
+            @Override
+            public void onDisconnected(CameraDevice camera) {
+                mCameraDevice.close();
+                mCameraDevice = null;
+            }
+
+            @Override
+            public void onError(CameraDevice camera, int error) {
+            }
+        };
+
+
+        private void createCameraPreviewSession() {
+
+            SurfaceTexture texture = mImageView.getSurfaceTexture();
+
+            texture.setDefaultBufferSize(180,180);
+            Surface surface = new Surface(texture);
+
+            try {
+                final CaptureRequest.Builder builder =
+                        mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+
+                builder.addTarget(surface);
+
+
+
+
+                mCameraDevice.createCaptureSession(Arrays.asList(surface),
+                        new CameraCaptureSession.StateCallback() {
+
+                            @Override
+                            public void onConfigured(CameraCaptureSession session) {
+                                mCaptureSession = session;
+                                try {
+                                    mCaptureSession.setRepeatingRequest(builder.build(),null,null);
+                                } catch (CameraAccessException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onConfigureFailed(CameraCaptureSession session) { }}, null );
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+
+
+        public boolean isOpen() {
+            if (mCameraDevice == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        public void openCamera() {
+            try {
+                if (getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    mCameraManager.openCamera(mCameraID,mCameraCallback,null);
+
+                }
+
+
+
+            } catch (CameraAccessException e) {
+
+            }
+        }
+
+        public void closeCamera() {
+
+            if (mCameraDevice != null) {
+                mCameraDevice.close();
+                mCameraDevice = null;
+            }
+        }
+
+
+
+    }
+
+
+    @Override
+    public void onPause() {
+        if(myCameras[CAMERA1].isOpen()){myCameras[CAMERA1].closeCamera();}
+        if(myCameras[CAMERA2].isOpen()){myCameras[CAMERA2].closeCamera();}
+        super.onPause();
     }
 }
