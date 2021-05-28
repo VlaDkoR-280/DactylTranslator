@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,35 +29,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.vladkor.dactyltranslator.Game.GameFragment;
-import com.vladkor.dactyltranslator.TopPlacesList.Person;
 import com.vladkor.dactyltranslator.TopPlacesList.MyRecyclerViewAdapter;
+import com.vladkor.dactyltranslator.TopPlacesList.Person;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfilePersonFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ProfilePersonFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class UserFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private DataSnapshot myDataSnapshot;
 
     public static final String KEY = "Users";
 
-    private Movable controller;
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -76,27 +64,11 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
     private ArrayList<Person> topPlaces = new ArrayList<>();
     private ArrayList<Person> persons = new ArrayList<>();
     private RecyclerView recyclerView;
-
-    public ProfilePersonFragment() {
-        // Required empty public constructor
-    }
-
-
-    public static ProfilePersonFragment newInstance(String param1, String param2) {
-        ProfilePersonFragment fragment = new ProfilePersonFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
         database = FirebaseDatabase.getInstance();
@@ -107,7 +79,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_base, container, false);
+        View v = inflater.inflate(R.layout.fragment_lesson, container, false);
         guideButton = v.findViewById(R.id.guide_button);
         gameButton = v.findViewById(R.id.game_button);
         scoreTextView = v.findViewById(R.id.score_text_view);
@@ -120,6 +92,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         account = GoogleSignIn.getLastSignedInAccount(getActivity());
+
         if(account!= null){
             nameTextView.setText(account.getDisplayName());
             Uri uriPhoto = account.getPhotoUrl();
@@ -144,8 +117,6 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
                     if (myPerson == null){
                         addMeToDB();
                     }
-                    //TODO Сортировка по количеству очков
-                    //...
                     MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), SortTopPlaces(persons));
                     recyclerView.setAdapter(adapter);
                 }catch (Exception e){
@@ -160,21 +131,15 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         });
 
         logOutButton.setOnClickListener(this);
-        gameButton.setOnClickListener(this);
-        guideButton.setOnClickListener(this);
-
-
+        gameButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_lessonFragment_to_gameFragment));
+        guideButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_lessonFragment_to_guideFragment));
         return v;
     }
 
-    public void setMovable(Movable movable){
-        this.controller = movable;
-    }
 
     private void addMeToDB(){
         Person myPerson = new Person(account.getDisplayName(),account.getPhotoUrl().toString(),0, account.getId());
         myRef.child(myPerson.getID()).setValue(myPerson);
-        controller.SetMyPerson(myPerson);
     }
 
     private void setPersonView(){
@@ -183,8 +148,6 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         scoreTextView.setText(String.format("%d/100", score));
         levelTextView.setText(Integer.toString(myPerson.getLevel()));
         progressBar.setProgress(score);
-        controller.SetMyRefData(myRef);
-        controller.SetMyPerson(myPerson);
     }
 
     private ArrayList<Person> SortTopPlaces(ArrayList<Person> users){
@@ -209,13 +172,6 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == logOutButton.getId()){
             FirebaseAuth.getInstance().signOut();
-            controller.ReAuth();
-        }else if(v.getId() == gameButton.getId()){
-            GameFragment gameFragment = new GameFragment();
-            controller.MoveTo(gameFragment);
-        }else if(v.getId() == guideButton.getId()){
-            GuideFragment guideFragment = new GuideFragment();
-            controller.MoveTo(guideFragment);
         }
     }
 }

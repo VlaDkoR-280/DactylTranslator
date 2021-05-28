@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,20 +28,11 @@ import com.vladkor.dactyltranslator.Movable;
 import com.vladkor.dactyltranslator.R;
 import com.vladkor.dactyltranslator.TopPlacesList.Person;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameTransitionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GameTransitionFragment extends Fragment implements View.OnClickListener {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class GameTransitionFragment extends Fragment {
 
 
-    private String mParam1;
-    private String mParam2;
-    private Movable controller;
+
+
 
     private Person myPerson;
 
@@ -49,6 +43,9 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
     private TextView levelPerson;
     private ProgressBar progressBar;
     private ImageView imagePerson;
+    private GoogleSignInAccount account;
+
+    private boolean isFirst = true;
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -63,22 +60,14 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
         this.offsetScore = 0;
     }
 
-    public static GameTransitionFragment newInstance(String param1, String param2) {
-        GameTransitionFragment fragment = new GameTransitionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            offsetScore = Integer.parseInt(getArguments().getString("OFFSET"));
         }
     }
 
@@ -86,18 +75,13 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game_transition, container, false);
-
-        myPerson = controller.GetMyPerson();
-
-        if (myPerson == null){
+        account = GoogleSignIn.getLastSignedInAccount(getContext());
+        if (account == null){
             return v;
         }
-        int score = myPerson.getScore() + offsetScore;
-        if (score<0){
-            myPerson.setScore(0);
-        }else{
-            myPerson.setScore(score);
-        }
+
+
+
         levelPerson = v.findViewById(R.id.level_update);
         scoreOfLevel = v.findViewById(R.id.score_of_level);
         nextLevelButton = v.findViewById(R.id.next_level_button);
@@ -105,24 +89,48 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
         scorePerson = v.findViewById(R.id.score_text_view);
         progressBar = v.findViewById(R.id.score_progress_bar);
         imagePerson = v.findViewById(R.id.image_person);
-        UpdateViewPerson();
+        //UpdateViewPerson();
 
-        nextLevelButton.setOnClickListener(this);
+        nextLevelButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_gameTransitionFragment_to_gameFragment));
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Users");
-        myRef.child(myPerson.getID()).setValue(myPerson);
+
         myRef.addChildEventListener(new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Person item = snapshot.getValue(Person.class);
+                if(item.getID().equals(account.getId())){
+                    myPerson = item;
+                    if(isFirst){
+                        int score = myPerson.getScore() + offsetScore;
+                        if (score<0){
+                            myPerson.setScore(0);
+                        }else{
+                            myPerson.setScore(score);
+                        }
+                        myRef.child(account.getId()).setValue(myPerson);
+                        isFirst = false;
+                    }
+                    UpdateViewPerson();
+                }
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Person item = snapshot.getValue(Person.class);
-                if(item.getID().equals(myPerson.getID())){
+                if(item.getID().equals(account.getId())){
                     myPerson = item;
+                    if(isFirst){
+                        int score = myPerson.getScore() + offsetScore;
+                        if (score<0){
+                            myPerson.setScore(0);
+                        }else{
+                            myPerson.setScore(score);
+                        }
+                        myRef.child(account.getId()).setValue(myPerson);
+                        isFirst = false;
+                    }
                     UpdateViewPerson();
                 }
             }
@@ -162,15 +170,4 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
         scoreOfLevel.setText(Integer.toString(offsetScore));
     }
 
-    public void setController(Movable movable){
-        controller = movable;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == nextLevelButton.getId()){
-            GameFragment gameFragment = new GameFragment();
-            controller.MoveTo(gameFragment);
-        }
-    }
 }

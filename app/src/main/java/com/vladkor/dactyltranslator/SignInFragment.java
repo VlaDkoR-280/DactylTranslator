@@ -1,12 +1,17 @@
 package com.vladkor.dactyltranslator;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.FragmentManager;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,18 +26,36 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
-import com.vladkor.dactyltranslator.Game.GameFragment;
-import com.vladkor.dactyltranslator.Game.GameTransitionFragment;
 import com.vladkor.dactyltranslator.TopPlacesList.Person;
 
+import java.util.concurrent.Executor;
 
-public class LessonsActivity extends AppCompatActivity implements Movable {
+public class SignInFragment extends Fragment {
+
+
     private static final int RC_SIGN_IN = 123;
-    private ProfilePersonFragment f1;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    private Person myPerson;
-    private DatabaseReference myRef;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+
+
+
+        return inflater.inflate(R.layout.fragment_sign_in, container, false);
+    }
 
     @Override
     public void onStart() {
@@ -43,20 +66,13 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser==null){
             signIn();
         }else{
             loadPersonFragment();
         }
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lessons);
     }
 
     private void signIn() {
@@ -84,7 +100,7 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -101,74 +117,9 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
     }
 
     private void loadPersonFragment(){
-
-        f1 = new ProfilePersonFragment();
-        f1.setMovable(this);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction()
-                .setReorderingAllowed(true);
-        fragmentTransaction.replace(R.id.fragment, f1);
-        fragmentTransaction.commit();
+        Navigation.findNavController(getView()).navigate(R.id.action_signInFragment_to_lessonFragment);
+//        Navigation.createNavigateOnClickListener();
     }
 
-    @Override
-    public void MoveTo(GameFragment fragment) {
-        fragment.setController(this);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction()
-                .setReorderingAllowed(true);
-        fragmentTransaction.replace(R.id.fragment, fragment);
-        fragmentTransaction.commit();
-    }
-
-
-
-    @Override
-    public void MoveTo(GuideFragment fragment) {
-        fragment.setController(this);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction()
-                .setReorderingAllowed(true)
-                .addToBackStack(null);
-        fragmentTransaction.replace(R.id.fragment, fragment);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void MoveTo(GameTransitionFragment fragment) {
-        fragment.setController(this);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction()
-                .setReorderingAllowed(true);
-        fragmentTransaction.replace(R.id.fragment, fragment);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void ReAuth() {
-        signIn();
-    }
-
-    @Override
-    public Person GetMyPerson() {
-        return myPerson;
-    }
-
-    @Override
-    public void SetMyPerson(Person person) {
-        myPerson = person;
-    }
-
-    @Override
-    public void SetMyPersonData() {
-        if(myRef!=null && myPerson != null){
-            myRef.child(myPerson.getID()).setValue(myPerson);
-        }
-    }
-
-    @Override
-    public void SetMyRefData(DatabaseReference ref) {
-        myRef = ref;
-    }
 
 }

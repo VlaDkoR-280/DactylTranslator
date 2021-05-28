@@ -5,13 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000">
-
-
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" />
+        android:orientation="vertical"
+        android:background="@drawable/bg_">
+
+        <include
+            android:id="@+id/CameraLayout"
+            layout="@layout/camera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/bottom_sheet"
+        layout="@layout/bottom_sheet_layout"
+        tools:layout_editor_absoluteX="-16dp" />
+
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

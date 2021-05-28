@@ -4,10 +4,12 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,8 +40,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     private CardView trueAnswer;
     ImageView trueImageAnswer;
 
-    private String mParam1;
-    private String mParam2;
     private TextView answerText;
     private TextView attemps;
 
@@ -60,8 +60,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
         gameCreator = new GameCreator();
     }
@@ -155,7 +153,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private void toGameTransition(int offsetScore){
         GameTransitionFragment gameTransitionFragment = new GameTransitionFragment(offsetScore);
-        controller.MoveTo(gameTransitionFragment);
+        Bundle bundle = new Bundle();
+        bundle.putString("OFFSET", Integer.toString(offsetScore));
+        Navigation.findNavController(getView()).navigate(R.id.action_gameFragment_to_gameTransitionFragment, bundle);
 
     }
 }
