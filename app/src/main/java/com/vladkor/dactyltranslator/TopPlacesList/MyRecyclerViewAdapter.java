@@ -1,4 +1,4 @@
-package com.vladkor.dactyltranslator.list;
+package com.vladkor.dactyltranslator.TopPlacesList;
 
 
 import android.content.Context;

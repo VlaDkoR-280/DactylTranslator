@@ -8,11 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 import com.squareup.picasso.Picasso;
 import com.vladkor.dactyltranslator.Movable;
@@ -73,10 +71,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
         attemps = v.findViewById(R.id.attemps);
-        cameraKitView = v.findViewById(R.id.camera);
+        cameraKitView = v.findViewById(R.id.camera_game);
         answerText = v.findViewById(R.id.answer_text);
-        captureImage = v.findViewById(R.id.CaptureBtn);
-        toggleCamera = v.findViewById(R.id.ToggleBtn);
+        captureImage = v.findViewById(R.id.CaptureBtn_game);
+        toggleCamera = v.findViewById(R.id.ToggleBtn_game);
         helpButton = v.findViewById(R.id.help_button);
         trueAnswer = v.findViewById(R.id.true_answer);
         trueImageAnswer = v.findViewById(R.id.true_image_answer);
@@ -89,6 +87,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         answerText.setText(String.format("%s", gameCreator.getAnswer()));
         int a = gameCreator.getAttemps();
         attemps.setText(Integer.toString(a));
+        cameraKitView.onStart();
         return v;
     }
 

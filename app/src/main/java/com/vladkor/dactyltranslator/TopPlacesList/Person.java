@@ -1,6 +1,4 @@
-package com.vladkor.dactyltranslator.list;
-
-import android.net.Uri;
+package com.vladkor.dactyltranslator.TopPlacesList;
 
 public class Person {
 

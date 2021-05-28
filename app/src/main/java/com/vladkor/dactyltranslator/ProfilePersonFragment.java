@@ -1,11 +1,9 @@
 package com.vladkor.dactyltranslator;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,9 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,12 +28,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.vladkor.dactyltranslator.Game.GameFragment;
-import com.vladkor.dactyltranslator.list.Person;
-import com.vladkor.dactyltranslator.list.MyRecyclerViewAdapter;
+import com.vladkor.dactyltranslator.TopPlacesList.Person;
+import com.vladkor.dactyltranslator.TopPlacesList.MyRecyclerViewAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -75,6 +69,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
     private TextView levelTextView;
     private ImageView avatarImageView;
     private Button logOutButton;
+    private Button guideButton;
     private ProgressBar progressBar;
     private CardView gameButton;
 
@@ -113,6 +108,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_base, container, false);
+        guideButton = v.findViewById(R.id.guide_button);
         gameButton = v.findViewById(R.id.game_button);
         scoreTextView = v.findViewById(R.id.score_text_view);
         progressBar = v.findViewById(R.id.score_progress_bar);
@@ -165,6 +161,8 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
 
         logOutButton.setOnClickListener(this);
         gameButton.setOnClickListener(this);
+        guideButton.setOnClickListener(this);
+
 
         return v;
     }
@@ -215,6 +213,9 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         }else if(v.getId() == gameButton.getId()){
             GameFragment gameFragment = new GameFragment();
             controller.MoveTo(gameFragment);
+        }else if(v.getId() == guideButton.getId()){
+            GuideFragment guideFragment = new GuideFragment();
+            controller.MoveTo(guideFragment);
         }
     }
 }

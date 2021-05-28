@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         app:cardElevation="30dp"
-        android:id="@+id/cameraBack"
+        android:id="@+id/camera_back_game"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginStart="30dp"
@@ -26,8 +26,7 @@
         app:cardCornerRadius="50dp">
 
         <com.camerakit.CameraKitView
-
-            android:id="@+id/camera"
+            android:id="@+id/camera_game"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
@@ -35,12 +34,12 @@
             app:camera_flash="auto"
             app:camera_facing="back"
             app:camera_focus="continuous"
-            app:camera_permissions="camera"/>
+            app:camera_permissions="camera" />
     </androidx.cardview.widget.CardView>
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/ToggleBtn"
+        android:id="@+id/ToggleBtn_game"
         app:cardElevation="20dp"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -50,8 +49,8 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/blue"
         app:cardCornerRadius="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/CaptureBtn"
-        app:layout_constraintEnd_toStartOf="@+id/CaptureBtn"
+        app:layout_constraintBottom_toBottomOf="@id/CaptureBtn_game"
+        app:layout_constraintEnd_toStartOf="@id/CaptureBtn_game"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         >
@@ -64,7 +63,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/CaptureBtn"
+        android:id="@+id/CaptureBtn_game"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
@@ -77,8 +76,8 @@
         app:cardElevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/ToggleBtn"
-        app:layout_constraintTop_toBottomOf="@+id/cameraBack">
+        app:layout_constraintStart_toEndOf="@+id/ToggleBtn_game"
+        app:layout_constraintTop_toBottomOf="@+id/camera_back_game">
 
         <ImageView
             android:layout_width="match_parent"

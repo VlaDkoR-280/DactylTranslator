@@ -162,7 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             forceTextView.setText("");
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.clear_toast_text), Toast.LENGTH_SHORT).show();
         }else if(v.getId() == btnGraphicsEditor.getId()){
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.graphics_editor_name), Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), GraphActivity.class);
+            startActivity(i);
+            //Toast.makeText(getApplicationContext(), getResources().getString(R.string.graphics_editor_name), Toast.LENGTH_SHORT).show();
         }else if (v.getId() == btnLessons.getId()){
             //Toast.makeText(getApplicationContext(), getResources().getString(R.string.lessons_name), Toast.LENGTH_SHORT).show();
             lessonsActivity = new LessonsActivity();

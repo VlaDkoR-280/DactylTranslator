@@ -24,6 +24,9 @@
     <string name="next_level">Next Level</string>
     <string name="attempts">Attempts</string>
     <string name="hint_score_of_level">Your score of Level</string>
+    <string name="edit_graph_text">Write here</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

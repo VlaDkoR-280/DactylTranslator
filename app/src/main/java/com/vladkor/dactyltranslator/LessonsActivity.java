@@ -2,8 +2,6 @@ package com.vladkor.dactyltranslator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentManager;
 
@@ -22,12 +20,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.vladkor.dactyltranslator.Game.GameFragment;
 import com.vladkor.dactyltranslator.Game.GameTransitionFragment;
-import com.vladkor.dactyltranslator.list.Person;
+import com.vladkor.dactyltranslator.TopPlacesList.Person;
 
 
 public class LessonsActivity extends AppCompatActivity implements Movable {
@@ -121,6 +117,19 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction()
                 .setReorderingAllowed(true);
+        fragmentTransaction.replace(R.id.fragment, fragment);
+        fragmentTransaction.commit();
+    }
+
+
+
+    @Override
+    public void MoveTo(GuideFragment fragment) {
+        fragment.setController(this);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction()
+                .setReorderingAllowed(true)
+                .addToBackStack(null);
         fragmentTransaction.replace(R.id.fragment, fragment);
         fragmentTransaction.commit();
     }
