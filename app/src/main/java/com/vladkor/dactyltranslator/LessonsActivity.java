@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.vladkor.dactyltranslator.Game.GameFragment;
 import com.vladkor.dactyltranslator.Game.GameTransitionFragment;
@@ -35,7 +36,7 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private Person myPerson;
-    private DataSnapshot dataSnapshot;
+    private DatabaseReference myRef;
 
     @Override
     public void onStart() {
@@ -109,8 +110,7 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
         f1.setMovable(this);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction()
-                .setReorderingAllowed(true)
-                .addToBackStack(null);
+                .setReorderingAllowed(true);
         fragmentTransaction.replace(R.id.fragment, f1);
         fragmentTransaction.commit();
     }
@@ -148,15 +148,19 @@ public class LessonsActivity extends AppCompatActivity implements Movable {
     @Override
     public void SetMyPerson(Person person) {
         myPerson = person;
-    }
-
-    @Override
-    public void SetMyDataSnapshot(DataSnapshot dataSnapshot) {
 
     }
 
     @Override
-    public DataSnapshot GetMyDataSnapshot() {
-        return null;
+    public void SetMyPersonData(Person person) {
+        if(myRef!=null){
+            myRef.child(person.getID()).setValue(person);
+        }
     }
+
+    @Override
+    public void SetMyRefData(DatabaseReference ref) {
+        myRef = ref;
+    }
+
 }

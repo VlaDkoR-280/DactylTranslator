@@ -67,6 +67,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game, container, false);
+        cameraKitView = v.findViewById(R.id.camera);
 
         captureImage = v.findViewById(R.id.CaptureBtn);
         toggleCamera = v.findViewById(R.id.ToggleBtn);

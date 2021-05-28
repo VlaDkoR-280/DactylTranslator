@@ -2,6 +2,7 @@ package com.vladkor.dactyltranslator.Game;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.vladkor.dactyltranslator.Movable;
 import com.vladkor.dactyltranslator.R;
 import com.vladkor.dactyltranslator.list.Person;
@@ -38,8 +40,6 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
     private String mParam2;
     private Movable controller;
 
-    private GoogleSignInClient mGoogleSignInClient;
-    private FirebaseAuth mAuth;
     private Person myPerson;
 
     private Button nextLevelButton;
@@ -67,24 +67,6 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
         return fragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth = FirebaseAuth.getInstance();
-        GoogleSignInOptions gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        myPerson = controller.GetMyPerson();
-        if(currentUser == null || myPerson == null){
-            controller.ReAuth();
-        }
-        myPerson.setScore(myPerson.getScore() + offsetScore);
-        controller.SetMyPerson(myPerson);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +81,19 @@ public class GameTransitionFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game_transition, container, false);
+
+        myPerson = controller.GetMyPerson();
+        if(myPerson == null){
+            controller.ReAuth();
+        }else{
+            myPerson.setScore(myPerson.getScore() + offsetScore);
+            if(myPerson.getScore() < 0){
+                myPerson.setScore(0);
+            }
+            controller.SetMyPerson(myPerson);
+            controller.SetMyPersonData(myPerson);
+        }
+        myPerson = controller.GetMyPerson();
         nextLevelButton = v.findViewById(R.id.next_level_button);
         namePerson = v.findViewById(R.id.name_person);
         scorePerson = v.findViewById(R.id.score_text_view);

@@ -6,7 +6,7 @@ public class Person {
 
     private String name;
     private String imageProfile;
-    private int score;
+    private int score = 0;
     private String ID;
 
     public String getID() {
@@ -68,10 +68,11 @@ public class Person {
 
 
     public int getLevel() {
+        this.level = (int)(score/100);
         return level;
     }
 
-    public void setLevel(int score) {
+    public void setLevel(int level) {
         this.level = (int)(score/100);
     }
 }

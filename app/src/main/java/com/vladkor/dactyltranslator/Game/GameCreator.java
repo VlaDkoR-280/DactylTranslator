@@ -56,7 +56,9 @@ public class GameCreator {
         return answer;
     }
     public String getUriAnswer(){
-        return imageLetters[ID].toString();
+        //return imageLetters[ID].toString();
+        //TEST
+        return "https://lh3.googleusercontent.com/a-/AOh14GgvbkD9X9XSXNaF4wYWR4H-nG8GxT6JieSjtL-Q0w=s96-c";
     }
 
 }

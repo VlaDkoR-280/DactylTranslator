@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +18,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +35,12 @@ import com.vladkor.dactyltranslator.Game.GameFragment;
 import com.vladkor.dactyltranslator.list.Person;
 import com.vladkor.dactyltranslator.list.MyRecyclerViewAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +60,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
 
     private DataSnapshot myDataSnapshot;
 
-    public static final String KEY = "Persons";
+    public static final String KEY = "Users";
 
     private Movable controller;
 
@@ -129,32 +138,22 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
                 try{
                     for(DataSnapshot ds : snapshot.getChildren()){
                         Person item = ds.getValue(Person.class);
+
+                        if(item.getID().equals(account.getId())) {
+                            myPerson = item;
+                            setPersonView();
+                        }
                         persons.add(item);
                     }
-                    if (persons.size() == 0) {
+                    if (myPerson == null){
                         addMeToDB();
-                    }else{
-                        boolean iExist = false;
-                        for(Person item : persons){
-                            if(item.getID().equals(account.getId())){
-                                iExist = true;
-                                getMeFromDB(item);
-                                break;
-                            }
-                        }
-                        if(!iExist){
-                            addMeToDB();
-                        }
                     }
                     //TODO Сортировка по количеству очков
                     //...
-                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-                    topPlaces.add(new Person("Test", account.getPhotoUrl().toString(), 10));
-                    MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), topPlaces);
+                    MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), SortTopPlaces(persons));
                     recyclerView.setAdapter(adapter);
                 }catch (Exception e){
-                    //Toast.makeText(getContext(),e.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -165,6 +164,7 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
         });
 
         logOutButton.setOnClickListener(this);
+        gameButton.setOnClickListener(this);
 
         return v;
     }
@@ -175,18 +175,36 @@ public class ProfilePersonFragment extends Fragment implements View.OnClickListe
 
     private void addMeToDB(){
         Person myPerson = new Person(account.getDisplayName(),account.getPhotoUrl().toString(),0, account.getId());
-        myRef.push().setValue(myPerson);
+        myRef.child(myPerson.getID()).setValue(myPerson);
+        controller.SetMyPerson(myPerson);
     }
 
-    private void getMeFromDB(Person item){
-        myPerson = item;
+    private void setPersonView(){
         int score = myPerson.getScore() % 100;
+        nameTextView.setText(myPerson.getName());
         scoreTextView.setText(String.format("%d/100", score));
-        try{
-            levelTextView.setText(Integer.toString(myPerson.getLevel()));
-        }catch (Exception e){}
+        levelTextView.setText(Integer.toString(myPerson.getLevel()));
         progressBar.setProgress(score);
-        controller.SetMyPerson(item);
+        controller.SetMyRefData(myRef);
+//        controller.SetMyPerson(myPerson);
+    }
+
+    private ArrayList<Person> SortTopPlaces(ArrayList<Person> users){
+        ArrayList<Person> topPlaces = new ArrayList<>();
+        Comparator<Person> comparator = new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o2.getScore() - o1.getScore();
+            }
+        };
+        Collections.sort(users,comparator);
+        Iterator iterator = users.iterator();
+
+        int i = 0;
+        while (iterator.hasNext() && i++ < 2){
+            topPlaces.add((Person) iterator.next());
+        }
+        return topPlaces;
     }
 
     @Override
