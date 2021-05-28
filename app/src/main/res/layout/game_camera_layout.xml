@@ -25,16 +25,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="50dp">
 
-        <com.camerakit.CameraKitView
+        <TextureView
             android:id="@+id/camera_game"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:keepScreenOn="true"
-            app:camera_flash="auto"
-            app:camera_facing="back"
-            app:camera_focus="continuous"
-            app:camera_permissions="camera" />
+            android:keepScreenOn="true"/>
     </androidx.cardview.widget.CardView>
 
 
