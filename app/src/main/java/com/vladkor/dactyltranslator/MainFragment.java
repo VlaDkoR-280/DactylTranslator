@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
@@ -41,16 +43,20 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     //Queue<ByteBuffer> queue;
-    private static final String MODEL_PATH = "";
+    private static final String MODEL_PATH = "model_converted.tflite";
     private static final boolean QUANT = false;
-    private static final String LABEL_PATH = "";
+    private static final String LABEL_PATH = "labels.txt";
     private static final int INPUT_SIZE = 180;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     private Classifier classifier;
 
@@ -189,6 +195,23 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    classifier = TensorFlowImageClassifier.create(
+                            getContext().getAssets(),
+                            MODEL_PATH,
+                            LABEL_PATH,
+                            INPUT_SIZE,
+                            QUANT);
+//                    makeButtonVisible();
+                } catch (final Exception e) {
+                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                }
+            }
+        });
+
         return v;
     }
 
@@ -212,7 +235,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == btnDetectObject.getId()){
-            mImageView.getBitmap();
+            startClassifer();
         }else if(v.getId() == btnToggleCamera.getId()){
             if(cameraFace){
                 if (myCameras[CAMERA2].isOpen()) {myCameras[CAMERA2].closeCamera();}
@@ -344,11 +367,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                classifier.close();
+            }
+        });
+    }
+
 
     @Override
     public void onPause() {
         if(myCameras[CAMERA1].isOpen()){myCameras[CAMERA1].closeCamera();}
         if(myCameras[CAMERA2].isOpen()){myCameras[CAMERA2].closeCamera();}
         super.onPause();
+    }
+
+
+    private void startClassifer(){
+        Bitmap bitmap = mImageView.getBitmap();
+        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+        final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
+        resultTextView.setText(resultTextView.getText().toString() + results.toString());
     }
 }
