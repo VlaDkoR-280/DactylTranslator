@@ -82,7 +82,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private CameraManager mCameraManager    = null;
     private final int CAMERA1   = 0;
     private final int CAMERA2   = 1;
-    private boolean cameraFace = true;
+    private boolean cameraFace = false;
 
 
     public MainFragment() {

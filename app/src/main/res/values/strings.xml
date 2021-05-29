@@ -26,7 +26,15 @@
     <string name="hint_score_of_level">Your score of Level</string>
     <string name="edit_graph_text">Write here</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="city_tv">City:</string>
+    <string name="city">Moscow</string>
+    <string name="platform_tv">Platform:</string>
+    <string name="platform">RUDN</string>
+    <string name="author_tv">Author:</string>
+    <string name="author">Korolev Vladislav Denisovich</string>
+    <string name="teacher_tv">Teacher:</string>
+    <string name="teacher">Stepanov Pavel Valerievich</string>
+
 
 
 </resources>

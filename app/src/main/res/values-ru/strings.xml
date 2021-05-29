@@ -25,4 +25,12 @@
     <string name="attempts">Попытки</string>
     <string name="hint_score_of_level">Твой счёт за уровень</string>
     <string name="edit_graph_text">Пишите здесь</string>
+    <string name="city_tv">Город:</string>
+    <string name="city">Москва</string>
+    <string name="platform_tv">Платформа:</string>
+    <string name="platform">РУДН</string>
+    <string name="author_tv">Автор:</string>
+    <string name="author">Королев Владислав Денисович</string>
+    <string name="teacher_tv">Учитель:</string>
+    <string name="teacher">Степанов Павел Валерьевич</string>
 </resources>

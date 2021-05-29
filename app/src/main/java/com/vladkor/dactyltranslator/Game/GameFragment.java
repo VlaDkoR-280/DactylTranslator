@@ -57,7 +57,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private TextView answerText;
     private TextView attemps;
-    private boolean cameraFace = true;
+    private boolean cameraFace = false;
 
     private final int CAMERA1   = 0;
     private final int CAMERA2   = 1;
