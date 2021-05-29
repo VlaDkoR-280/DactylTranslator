@@ -162,7 +162,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         Iterator iterator = users.iterator();
 
         int i = 0;
-        while (iterator.hasNext() && i++ < 2){
+        while (iterator.hasNext() && i++ < 3){
             topPlaces.add((Person) iterator.next());
         }
         return topPlaces;
